@@ -17,6 +17,16 @@ public class ThreadSafeQueue implements Queue {
     public synchronized int size() {
         return queue.size();
     }
+    public synchronized Item getAndAssignItem(List<Productor> productoresAsociados) {
+        for (int i = 0; i < queue.size(); i++) {
+            Item item = queue.get(i);
+            if (!item.isEstaAsignado() && productoresAsociados.contains(item.getProd())) {
+                item.setEstaAsignado(true);
+                return queue.remove(i);
+            }
+        }
+        return null;
+    }
 
 
 

@@ -12,9 +12,9 @@ public class Main {
 
 
         // Crear productores y asociarlos con los consumidores
-        Productor productor0 = new Productor(queue, 20, 0, consumidores);
-        Productor productor1 = new Productor(queue, 20, 1, consumidores);
-        Productor productor2 = new Productor(queue, 20, 2, consumidores);
+        Productor productor0 = new Productor(queue, 5, 0, consumidores);
+        Productor productor1 = new Productor(queue, 5, 1, consumidores);
+        Productor productor2 = new Productor(queue, 5, 2, consumidores);
 
         Thread t0 = new Thread(productor0);
         Thread t1 = new Thread(productor1);

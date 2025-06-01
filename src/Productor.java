@@ -1,10 +1,13 @@
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Productor implements Runnable {
     ThreadSafeQueue cola;
     int items, id;
     List<Consumidor> consumidores;
+    public boolean producioAlgo = false;
 
     public Productor(ThreadSafeQueue cola, int cantItems, int id, List<Consumidor> consumidores) {
         this.cola = cola;
@@ -26,6 +29,7 @@ class Productor implements Runnable {
             }
             cola.addItem(it);
             //se le avisa a un consumidor asociado que ya hay un item disponible
+            setProducioAlgo(true);
             avisarConsumidor();
             System.out.println(id + "_espera_que_item_" + i + "_se_consuma");
             //espera pasiva mientras su item no sea consumid(es despertado por el consumidor cuando sea oportuno)
@@ -40,12 +44,16 @@ class Productor implements Runnable {
         for (Consumidor c : consumidores) {
             if(c.productoresAsociados.contains(this)) {
                 synchronized (c) {
-                    c.listoParaConsumir = true;
                     c.notify();
-                    //salimos del for cuando haya encontrado alguno para no despertar a varios.
-                    break;
                 }
             }
         }
     }
+    public synchronized void setProducioAlgo(boolean producioAlgo) {
+        this.producioAlgo = producioAlgo;
+    }
+    public synchronized boolean getProducioAlgo() {
+        return producioAlgo;
+    }
+
 }
